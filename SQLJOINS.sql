@@ -13,7 +13,7 @@ using the products table and the categories table, return the product name and t
  
  
 /* joins: find the employee with the most total quantity sold.  use the sum() function and group by */
-SELECT employees.FirstName, employees.EmployeeID, SUM(sales.PricePerUnit * sales.Quantity) AS Total FROM employees
+SELECT employees.FirstName, employees.EmployeeID, SUM(sales.Quantity) AS Total FROM employees
 INNER JOIN sales ON sales.EmployeeID = employees.EmployeeID
 group by EmployeeID
 ORDER BY Total DESC;
@@ -21,11 +21,12 @@ ORDER BY Total DESC;
 
 /* joins: find the name of the department, and the name of the category for Appliances and Games */
 SELECT * FROM departments
-LEFT JOIN categories ON categories.DepartmentID = departments.DepartmentID;
+LEFT JOIN categories ON categories.DepartmentID = departments.DepartmentID
+WHERE categories.Name LIKE "%Appliances%" OR categories.Name LIKE "%Games%";
 
 /* joins: find the product name, total # sold, and total price sold,
  for Eagles: Hotel California --You may need to use SUM() */
-SELECT products.Name, SUM(sales.Quantity) AS "total # sold", SUM(sales.PricePerUnit) AS "Total Price" FROM products
+SELECT products.Name, SUM(sales.Quantity) AS "Total # sold", SUM(sales.quantity * sales.PricePerUnit) AS "Total Price" FROM products
 LEFT JOIN sales ON products.ProductID = sales.ProductID
 WHERE products.Name LIKE '%Eagles: Hotel%'; 
 
@@ -46,4 +47,4 @@ This query should return:
 SELECT e.employeeID, e.FirstName, e.LastName,  p.Name, s.Quantity FROM employees AS e
 LEFT JOIN sales AS s ON s.EmployeeID = e.EmployeeID
 INNER JOIN products AS p ON p.ProductID = s.ProductID
-ORDER BY e.firstname;
+ORDER BY e.firstname asc, e.LastName asc;
